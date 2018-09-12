@@ -1,12 +1,29 @@
-SET QUOTED_IDENTIFIER ON
+/*
+This migration script replaces uncommitted changes made to these objects:
+Assets
+IncidentsActivities
+Merge_Accounts
+
+Use this script to make necessary schema and data changes for these objects only. Schema changes to any other objects won't be deployed.
+
+Schema changes and migration scripts are deployed in the order they're committed.
+
+Migration scripts must not reference static data. When you deploy migration scripts alongside static data 
+changes, the migration scripts will run first. This can cause the deployment to fail. 
+Read more at https://documentation.red-gate.com/display/SOC6/Static+data+and+migrations.
+*/
+
+SET NUMERIC_ROUNDABORT OFF
 GO
-SET ANSI_NULLS ON
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Altering [integration].[Merge_Accounts]'
 GO
 
 /*
   HJB 9/11/2018 Refactoring entire sproc
 */
-CREATE PROC [integration].[Merge_Accounts]
+ALTER PROC [integration].[Merge_Accounts]
 AS
 BEGIN
 
@@ -108,3 +125,14 @@ BEGIN
 
 END;
 GO
+PRINT N'Altering [astea].[Assets]'
+GO
+ALTER TABLE [astea].[Assets] ADD
+[NEWCOLUMN1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+GO
+PRINT N'Altering [astea].[IncidentsActivities]'
+GO
+ALTER TABLE [astea].[IncidentsActivities] ADD
+[NEWCOLUMN2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+GO
+

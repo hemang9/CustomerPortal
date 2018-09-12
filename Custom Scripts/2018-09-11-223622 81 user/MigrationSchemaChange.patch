@@ -1,0 +1,48 @@
+diff --git a/Stored Procedures/integration.Merge_Accounts.sql b/Stored Procedures/integration.Merge_Accounts.sql
+index e9ec204..af480d8 100644
+--- a/Stored Procedures/integration.Merge_Accounts.sql
++++ b/Stored Procedures/integration.Merge_Accounts.sql
+@@ -4,13 +4,8 @@
+ GO
+ 
+ /*
+-MOD HISTORY
+-----
+-HJB  3/7/2018   Merge the accounts latest
+------
+-EXEC stmt
+- exec [integration].[Merge_Accounts]
+-**/
++  HJB 9/11/2018 Refactoring entire sproc
++*/
+ CREATE PROC [integration].[Merge_Accounts]
+ AS
+ BEGIN
+diff --git a/Tables/astea.Assets.sql b/Tables/astea.Assets.sql
+index 93a81a6..c7ab2ee 100644
+--- a/Tables/astea.Assets.sql
++++ b/Tables/astea.Assets.sql
+@@ -10,7 +10,8 @@
+ [ProductClass3] [varchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ [qty] [float] NULL,
+ [tagno] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+-[NEWCOLUMN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
++[NEWCOLUMN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[NEWCOLUMN1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+ ) ON [PRIMARY]
+ GO
+ ALTER TABLE [astea].[Assets] ADD CONSTRAINT [PK_Item_Id] PRIMARY KEY CLUSTERED  ([item_id]) ON [PRIMARY]
+diff --git a/Tables/astea.IncidentsActivities.sql b/Tables/astea.IncidentsActivities.sql
+index 75ce68e..e7348b7 100644
+--- a/Tables/astea.IncidentsActivities.sql
++++ b/Tables/astea.IncidentsActivities.sql
+@@ -8,7 +8,8 @@
+ [IsPartsOnlyCall] [bit] NULL,
+ [LastModifiedBy] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ [LastModifiedOn] [datetimeoffset] NULL,
+-[ETATime] [datetimeoffset] NULL
++[ETATime] [datetimeoffset] NULL,
++[NEWCOLUMN2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+ ) ON [PRIMARY]
+ GO
+ ALTER TABLE [astea].[IncidentsActivities] ADD CONSTRAINT [PK_astea.IncidentsActivities] PRIMARY KEY CLUSTERED  ([Id]) ON [PRIMARY]
