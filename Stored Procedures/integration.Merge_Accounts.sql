@@ -7,6 +7,10 @@ GO
   HJB 9/11/2018 Refactoring entire sproc\
   HJB 9/12/2018 Refactoring entire sproc  v2
   HJB 9/12/2018 Refactoring entire sproc  v2 additional changes
+   HJB 9/12/2018 Refactoring entire sproc  v3 additional changes
+    HJB 9/12/2018 Refactoring entire sproc  v3.1 additional changes
+	 HJB 9/12/2018 Refactoring entire sproc  v3.2 additional changes
+	 HJB 9/12/2018 Refactoring entire sproc  v3.3 additional changes
 
 */
 CREATE PROC [integration].[Merge_Accounts]
