@@ -4,7 +4,9 @@ SET ANSI_NULLS ON
 GO
 
 /*
-  HJB 9/11/2018 Refactoring entire sproc
+  HJB 9/11/2018 Refactoring entire sproc\
+  HJB 9/12/2018 Refactoring entire sproc  v2
+
 */
 CREATE PROC [integration].[Merge_Accounts]
 AS
