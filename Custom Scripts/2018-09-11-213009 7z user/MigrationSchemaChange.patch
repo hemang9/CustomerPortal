@@ -1,0 +1,14 @@
+diff --git a/Tables/astea.Assets.sql b/Tables/astea.Assets.sql
+index 2685126..93a81a6 100644
+--- a/Tables/astea.Assets.sql
++++ b/Tables/astea.Assets.sql
+@@ -9,7 +9,8 @@
+ [ProductClass2] [varchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ [ProductClass3] [varchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ [qty] [float] NULL,
+-[tagno] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
++[tagno] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[NEWCOLUMN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+ ) ON [PRIMARY]
+ GO
+ ALTER TABLE [astea].[Assets] ADD CONSTRAINT [PK_Item_Id] PRIMARY KEY CLUSTERED  ([item_id]) ON [PRIMARY]

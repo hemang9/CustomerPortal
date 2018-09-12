@@ -1,0 +1,3 @@
+CREATE SCHEMA [fpastea]
+AUTHORIZATION [dbo]
+GO

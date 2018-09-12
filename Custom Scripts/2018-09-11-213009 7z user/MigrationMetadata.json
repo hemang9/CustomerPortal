@@ -1,0 +1,11 @@
+{
+  "Id": "e5e3ea89-038a-4d65-8636-e20e3c735018",
+  "Name": "Covers changes to: Assets. Script created at 2018-09-11 21:23.",
+  "ObjectIds": [
+    {
+      "Name": "Assets",
+      "Owner": "astea",
+      "ObjectType": "Table"
+    }
+  ]
+}
