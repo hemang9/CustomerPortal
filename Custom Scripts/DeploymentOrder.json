@@ -3,6 +3,10 @@
   "Deployment order": [
     {"Description":"Changes before migration script 'Covers changes to: Assets. Script created at 2018-09-11 21:23.'","Type":"Compare","Id":"2018-09-11-213009 7y auto"},
     {"Description":"Migration script 'Covers changes to: Assets. Script created at 2018-09-11 21:23.'","Type":"Migration","Id":"2018-09-11-213009 7z user"},
+    {"Description":"Changes before migration script 'Covers changes to: Assets, IncidentsActivities, Merge_Accounts. Script created at 2018-09-11 22:32.'","Type":"Compare","Id":"2018-09-11-223622 80 auto"},
+    {"Description":"Migration script 'Covers changes to: Assets, IncidentsActivities, Merge_Accounts. Script created at 2018-09-11 22:32.'","Type":"Migration","Id":"2018-09-11-223622 81 user"},
+    {"Description":"Changes before migration script 'Script created at 2018-09-11 21:27.'","Type":"Compare","Id":"2018-09-11-223710 82 auto"},
+    {"Description":"Migration script 'Script created at 2018-09-11 21:27.'","Type":"Migration","Id":"2018-09-11-223710 83 user"},
   ],
   "Conflict in this file?": "If there’s a conflict in this file, you probably want to keep both changes. Learn more: http://www.red-gate.com/SOC4/order-file-more-info"
 }

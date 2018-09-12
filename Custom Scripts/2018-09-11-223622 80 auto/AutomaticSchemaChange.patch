@@ -1,0 +1,251 @@
+diff --git a/Security/Schemas/crm.sql b/Security/Schemas/crm.sql
+new file mode 100644
+index 0000000..108dae6
+--- /dev/null
++++ b/Security/Schemas/crm.sql
+@@ -0,0 +1,3 @@
++CREATE SCHEMA [crm]
++AUTHORIZATION [dbo]
++GO
+diff --git a/Security/Schemas/integration.sql b/Security/Schemas/integration.sql
+new file mode 100644
+index 0000000..38f5719
+--- /dev/null
++++ b/Security/Schemas/integration.sql
+@@ -0,0 +1,3 @@
++CREATE SCHEMA [integration]
++AUTHORIZATION [dbo]
++GO
+diff --git a/Security/Schemas/staging.sql b/Security/Schemas/staging.sql
+new file mode 100644
+index 0000000..cea7212
+--- /dev/null
++++ b/Security/Schemas/staging.sql
+@@ -0,0 +1,3 @@
++CREATE SCHEMA [staging]
++AUTHORIZATION [dbo]
++GO
+diff --git a/Stored Procedures/integration.Merge_Accounts.sql b/Stored Procedures/integration.Merge_Accounts.sql
+new file mode 100644
+index 0000000..e9ec204
+--- /dev/null
++++ b/Stored Procedures/integration.Merge_Accounts.sql
+@@ -0,0 +1,115 @@
++SET QUOTED_IDENTIFIER ON
++GO
++SET ANSI_NULLS ON
++GO
++
++/*
++MOD HISTORY
++----
++HJB  3/7/2018   Merge the accounts latest
++-----
++EXEC stmt
++ exec [integration].[Merge_Accounts]
++**/
++CREATE PROC [integration].[Merge_Accounts]
++AS
++BEGIN
++
++    MERGE INTO crm.Accounts AS t
++    USING
++    (
++        SELECT AccountId,
++               AccountNumber,
++               AccountName,
++               PrimaryContactId,
++               StatusCode,
++               Address1_Line1,
++               NULLIF(Address1_Line2, '') AS Address1_Line2,
++               NULLIF(Address1_Line3, '') AS Address1_Line3,
++               Address1_City,
++               Address1_StateOrProvince,
++               Address1_PostalCode,
++               Address1_County,
++               Address1_Country,
++               OwnerId,
++               [ChannelPartnerType],
++               CustomerTypeCode,
++               OpenIncidentCount,
++               ClosedIncidentCount,
++               ContractCount,
++               ContractAssetCount,
++               ActiveContractAssetCount,
++               [IsChannelPartner],
++               [CreatedOn],
++               [ModifiedOn],
++               InactiveContractAssetCount,
++			   nceaccounttype
++        FROM staging.Accounts
++    ) AS source
++    ON (t.AccountId = source.AccountId)
++    WHEN NOT MATCHED THEN
++        INSERT
++        (
++            AccountId,
++            AccountNumber,
++            AccountName,
++            PrimaryContactId,
++            StatusCode,
++            Address1_Line1,
++            Address1_Line2,
++            Address1_Line3,
++            Address1_City,
++            Address1_StateOrProvince,
++            Address1_PostalCode,
++            Address1_County,
++            Address1_Country,
++            OwnerId,
++            [ChannelPartnerType],
++            CustomerTypeCode,
++            OpenIncidentCount,
++            ClosedIncidentCount,
++            ContractCount,
++            ContractAssetCount,
++            ActiveContractAssetCount,
++            [IsChannelPartner],
++            [CreatedOn],
++            [ModifiedOn],
++            InactiveContractAssetCount,
++			nceaccounttype
++        )
++        VALUES
++        (source.AccountId, source.AccountNumber, source.AccountName, source.PrimaryContactId, source.StatusCode,
++         source.Address1_Line1, source.Address1_Line2, source.Address1_Line3, source.Address1_City,
++         source.Address1_StateOrProvince, source.Address1_PostalCode, source.Address1_County, source.Address1_Country,
++         source.OwnerId, source.[ChannelPartnerType], source.CustomerTypeCode, source.OpenIncidentCount,
++         source.ClosedIncidentCount, source.ContractCount, source.ContractAssetCount, source.ActiveContractAssetCount,
++         source.[IsChannelPartner], source.CreatedOn, source.ModifiedOn, source.InactiveContractAssetCount, source.nceaccounttype)
++    WHEN MATCHED THEN
++        UPDATE SET AccountNumber = source.AccountNumber,
++                   AccountName = source.AccountName,
++                   PrimaryContactId = source.PrimaryContactId,
++                   StatusCode = source.StatusCode,
++                   Address1_Line1 = source.Address1_Line1,
++                   Address1_Line2 = source.Address1_Line2,
++                   Address1_Line3 = source.Address1_Line3,
++                   Address1_City = source.Address1_City,
++                   Address1_StateOrProvince = source.Address1_StateOrProvince,
++                   Address1_PostalCode = source.Address1_PostalCode,
++                   Address1_County = source.Address1_County,
++                   Address1_Country = source.Address1_Country,
++                   OwnerId = source.OwnerId,
++                   t.ChannelPartnerType = source.[ChannelPartnerType],
++                   CustomerTypeCode = source.CustomerTypeCode,
++                   OpenIncidentCount = source.OpenIncidentCount,
++                   ClosedIncidentCount = source.ClosedIncidentCount,
++                   ContractCount = source.ContractCount,
++                   ContractAssetCount = source.ContractAssetCount,
++                   ActiveContractAssetCount = source.ActiveContractAssetCount,
++                   t.IsChannelPartner = source.[IsChannelPartner],
++                   CreatedOn = source.CreatedOn,
++                   ModifiedOn = source.ModifiedOn,
++                   InactiveContractAssetCount = source.InactiveContractAssetCount,
++				   nceaccounttype = source.nceaccounttype;
++
++END;
++GO
+diff --git a/Tables/astea.IncidentsActivities.sql b/Tables/astea.IncidentsActivities.sql
+new file mode 100644
+index 0000000..75ce68e
+--- /dev/null
++++ b/Tables/astea.IncidentsActivities.sql
+@@ -0,0 +1,15 @@
++CREATE TABLE [astea].[IncidentsActivities]
++(
++[Id] [uniqueidentifier] NOT NULL CONSTRAINT [DF_IncidentsActivities] DEFAULT (newsequentialid()),
++[AsteaOrderId] [varchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Activity] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[ActivityStartTime] [datetimeoffset] NULL,
++[ActivityCompletionTime] [datetimeoffset] NULL,
++[IsPartsOnlyCall] [bit] NULL,
++[LastModifiedBy] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[LastModifiedOn] [datetimeoffset] NULL,
++[ETATime] [datetimeoffset] NULL
++) ON [PRIMARY]
++GO
++ALTER TABLE [astea].[IncidentsActivities] ADD CONSTRAINT [PK_astea.IncidentsActivities] PRIMARY KEY CLUSTERED  ([Id]) ON [PRIMARY]
++GO
+diff --git a/Tables/crm.Accounts.sql b/Tables/crm.Accounts.sql
+new file mode 100644
+index 0000000..a4c7a16
+--- /dev/null
++++ b/Tables/crm.Accounts.sql
+@@ -0,0 +1,37 @@
++CREATE TABLE [crm].[Accounts]
++(
++[AccountId] [uniqueidentifier] NOT NULL,
++[AccountNumber] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[AccountName] [nvarchar] (160) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[PrimaryContactId] [uniqueidentifier] NULL,
++[StatusCode] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line1] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line2] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line3] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_City] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_StateOrProvince] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_PostalCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_County] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Country] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[OwnerId] [uniqueidentifier] NOT NULL,
++[ChannelPartnerType] [int] NULL,
++[CustomerTypeCode] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[OpenIncidentCount] [int] NULL,
++[ClosedIncidentCount] [int] NULL,
++[ContractCount] [int] NULL,
++[ContractAssetCount] [int] NULL,
++[ActiveContractAssetCount] [int] NULL,
++[IsChannelPartner] [bit] NULL,
++[CreatedOn] [datetime] NULL,
++[ModifiedOn] [datetime] NULL,
++[PortalAdminId] [uniqueidentifier] NULL,
++[nceaccounttype] [int] NULL,
++[InactiveContractAssetCount] [int] NULL
++) ON [PRIMARY]
++GO
++ALTER TABLE [crm].[Accounts] ADD CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED  ([AccountId]) ON [PRIMARY]
++GO
++CREATE NONCLUSTERED INDEX [IX_OwnerId] ON [crm].[Accounts] ([OwnerId]) ON [PRIMARY]
++GO
++CREATE NONCLUSTERED INDEX [IX_PrimaryContactId] ON [crm].[Accounts] ([PrimaryContactId]) ON [PRIMARY]
++GO
+diff --git a/Tables/staging.Accounts.sql b/Tables/staging.Accounts.sql
+new file mode 100644
+index 0000000..6295888
+--- /dev/null
++++ b/Tables/staging.Accounts.sql
+@@ -0,0 +1,33 @@
++CREATE TABLE [staging].[Accounts]
++(
++[AccountId] [uniqueidentifier] NOT NULL,
++[AccountNumber] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[AccountName] [nvarchar] (160) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[PrimaryContactId] [uniqueidentifier] NULL,
++[StatusCode] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line1] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line2] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Line3] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_City] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_StateOrProvince] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_PostalCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_County] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[Address1_Country] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[OwnerId] [uniqueidentifier] NOT NULL,
++[ChannelPartnerType] [int] NULL,
++[CustomerTypeCode] [nvarchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
++[OpenIncidentCount] [int] NULL,
++[ClosedIncidentCount] [int] NULL,
++[ContractCount] [int] NULL,
++[ContractAssetCount] [int] NULL,
++[ActiveContractAssetCount] [int] NULL,
++[IsChannelPartner] [bit] NULL,
++[CreatedOn] [datetime] NULL,
++[ModifiedOn] [datetime] NULL,
++[PortalAdminId] [uniqueidentifier] NULL,
++[nceaccounttype] [int] NULL,
++[InactiveContractAssetCount] [int] NULL
++) ON [PRIMARY]
++GO
++ALTER TABLE [staging].[Accounts] ADD CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED  ([AccountId]) ON [PRIMARY]
++GO

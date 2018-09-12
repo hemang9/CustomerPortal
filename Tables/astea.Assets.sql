@@ -10,7 +10,8 @@ CREATE TABLE [astea].[Assets]
 [ProductClass3] [varchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [qty] [float] NULL,
 [tagno] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[NEWCOLUMN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[NEWCOLUMN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NEWCOLUMN1] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [astea].[Assets] ADD CONSTRAINT [PK_Item_Id] PRIMARY KEY CLUSTERED  ([item_id]) ON [PRIMARY]
